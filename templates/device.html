@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Page 2</title>
+</head>
+<body>
+    <h1>TV Redirecter</h1>
+    <p class="qr_code_text">{{code}}</p>
+
+    <form action="javascript:void(0);">
+        <!-- <input  type="hidden" name="code" value={{code}} /> -->
+        <input id="urlInput"/>
+        <button id="sendButton">Submit</button>
+    </form>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script>
+        var socket = io.connect('http://' + document.domain + ':' + location.port);
+        
+        document.getElementById('sendButton').addEventListener('click', function() {
+            var url = document.getElementById('urlInput').value;
+            
+            // Validate the URL
+            // if (!isValidURL(url)) {
+            //     alert('Invalid URL');
+            //     return;
+            // }
+
+            // Extract the secret code from the URL
+            var urlParams = new URLSearchParams(window.location.search);
+            var secret_code = urlParams.get('code');
+            
+            console.log('url:', url);
+            console.log('secret_code:', secret_code);
+
+            // Send a message and the secret code to the server
+            socket.emit('message_device2tv', {'url': url, 'secret_code': secret_code});
+            // socket.emit('message_device2tv', url);
+        });
+        
+        // socket.on('unauthorized', function() {
+        //     alert('Unauthorized: Secret code does not match.');
+        // });
+
+        function isValidURL(url) {
+        var urlRegex = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/;
+        return urlRegex.test(url);
+        }
+    </script>
+</body>
+</html>

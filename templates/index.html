@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Page 1</title>
+</head>
+<body>
+    <h1>TV Redirecter</h1>
+
+    
+    <div class="qr_code">
+        <p class="qr_code_text">{{secret_code}}</p>
+        <img class="qr_code_img" src="{{qr_code}}">
+    </div>
+    
+    <!-- Display a message received from Page 2 -->
+    <div id="message"></div>
+    
+    <!-- Link to Page 2 -->
+    <a href="/device?code={{secret_code}}">Go to Page 2</a>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script>
+        var socket = io.connect('http://' + document.domain + ':' + location.port);
+        
+        // Listen for messages from the server
+        socket.on('message_from_server', function(message) {
+            document.getElementById('message').textContent = message;
+            window.location.href = message;
+        });
+    </script>
+</body>
+</html>
